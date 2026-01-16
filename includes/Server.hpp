@@ -9,6 +9,12 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <poll.h>
+
+// add for othmane
+
+#include <map>
+#include "Channel.hpp"
+
 #include <stdlib.h>
 #include <netdb.h>       // getnameinfo, NI_MAXHOST
 #include <sys/socket.h>  // sockaddr, sockaddr_storage
@@ -29,7 +35,8 @@ class Server {
 		char buffer[512];       // Buffer for incoming data
 		struct pollfd _fds[MAX_CLIENTS];  // Poll array
 		// int _numFds;                      // Number of active fds
-	
+		std::map<std::string, Channel*> _channels;
+
 	public:
 		Server();
 		Server(const Server& other);
@@ -56,6 +63,38 @@ class Server {
 	bool isNicknameTaken(std::string nickname, int excludeIndex);
 	bool check_passok(std::string command, std::string argument, int index);
 	bool check_authentication(std::string command, std::string argument, int index);
+
+	// for add channel
+	#ifndef CHANNEL_HPP
+#define CHANNEL_HPP
+#include <iostream>
+#include <set>
+#include "Client.hpp"
+#include <string>
+class Channel {
+	private:
+		std::string _name;
+		std::set<Client*> _users;
+	public:
+		Channel();
+		Channel(const std::string& name);
+		Channel(const Channel& other);
+		Channel& operator=(const Channel& other);
+		~Channel();
+		// getters/setters...
+
+		void addUser(Client *client);
+		void removeUser(Client *client);
+		bool hasUser(Client *Client) const;
+
+		const std::string& getName() const;
+		const std::set<Client*>& getUsers() const;
+
+		void broadcast(const std::string& message, Client* exclude);
+
+
+};
+#endif
 };
 
 

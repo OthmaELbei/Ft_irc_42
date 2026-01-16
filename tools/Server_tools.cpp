@@ -204,22 +204,22 @@ void Server::processCommand(int index, std::string &message)
 				size_t pos = chanel.find(',');
 				int count = std::count(chanel.begin(), chanel.end(), ',');
 				std::vector<std::string> all_chanel = split_chanel(chanel, ',');
-				for (const std::string &word : all_chanel)
+				for (size_t i = 0 ; i  < all_chanel.size() ;i++)
 				{
-					std ::cout << word << std::endl;
-					if (word.empty())
+					std ::cout << all_chanel[i] << std::endl;
+					if (all_chanel.empty())
 					{
-						sendError(this->clients[index]->get_fd(), "461 " + word + " Not enough parameters\r\n");
+						sendError(this->clients[index]->get_fd(), "461 " + all_chanel[i] + " Not enough parameters\r\n");
 						return;
 					}
-					if (word[0] != '#' && word[0] != '&')
+					if (all_chanel[i][0] != '#' && all_chanel[i][0] != '&')
 					{
-						sendError(this->clients[index]->get_fd(), "476 " + word + " Bad Channel Mask\r\n");
+						sendError(this->clients[index]->get_fd(), "476 " + all_chanel[i] + " Bad Channel Mask\r\n");
 						return;
 					}
-					if (word.size() < 2)
+					if (all_chanel[i].size() < 2)
 					{
-						sendError(this->clients[index]->get_fd(), "476 " + word + " Channel name too short\r\n");
+						sendError(this->clients[index]->get_fd(), "476 " + all_chanel[i] + " Channel name too short\r\n");
 						return;
 					}
 				}

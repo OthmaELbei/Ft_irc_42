@@ -22,12 +22,12 @@ int Client::get_fd() const
 	return _fd;
 }
 
-std::string Client::getNickname() const
+const std::string& Client::getNickname() const
 {
 	return _nickname;
 }
 
-std::string Client::getUsername() const
+const std::string& Client::getUsername() const
 {
 	return _username;
 }
@@ -108,4 +108,46 @@ void Client::clearBuffer()
 void Client::setBuffer(std::string const data)
 {
 	_buffer = data;
+}
+
+	void Client::addChannel(Channel *channel)
+	{
+		if(!channel)
+		{
+			return;
+		}
+		if(Chanael.find(channel) != Chanael.end())
+		{
+			return;
+		}
+		Chanael.insert(channel);
+		// client->addChannel(this);
+	}
+
+void Client::removeChannel(Channel *chanael)
+{
+	if(!chanael)
+		{
+			return;
+		}
+		auto it = Chanael.find(chanael);
+		if(it != Chanael.end())
+		{
+			Chanael.erase(it);
+		}
+		
+}
+	bool Client::isInChannel(const std::string& channelName)const
+	{
+		    for (std::set<Channel*>::const_iterator it = Chanael.begin();
+         it != Chanael.end(); ++it)
+    {
+        if ((*it)->getName() == channelName)
+            return true;
+    }
+    return false;
+	}
+const std::set<Channel*> Client::getChannels() const
+{
+	return Chanael;
 }
